@@ -1,0 +1,43 @@
+.menu {
+  position: absolute;
+  top: 100%;
+  width: 100%;
+  background: white;
+  border: 1px solid #eee;
+  border-radius: 12px;
+  max-height: 200px;
+  overflow-y: auto;
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px;
+
+  &__option {
+    padding: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-radius: 12px;
+
+    &:hover {
+      background: #f0f0f0;
+    }
+
+    &__content {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    &__check-mark {
+      font-size: 16px;
+      color: green;
+      margin-right: 12px;
+    }
+  }
+}
+.selected {
+  background: #e6f7e6;
+}

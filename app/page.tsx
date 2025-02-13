@@ -1,95 +1,70 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+
+import styles from "./page.module.scss";
+import Dropdown from "./components/DropDown";
+import { useState, useCallback } from "react";
+import {
+  BookOpen,
+  FlaskConical,
+  Palette,
+  Dumbbell,
+  Gamepad2,
+  Heart,
+  XCircle,
+} from "lucide-react";
+
+type Option = {
+  title: string;
+  icon: React.FC<{ size?: number }>;
+};
 
 export default function Home() {
-  return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol>
-          <li>
-            Get started by editing <code>app/page.tsx</code>.
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+  const initialOptions: Option[] = [
+    { title: "Education", icon: BookOpen },
+    { title: "Science", icon: FlaskConical },
+    { title: "Art", icon: Palette },
+    { title: "Sport", icon: Dumbbell },
+    { title: "Game", icon: Gamepad2 },
+    { title: "Health", icon: Heart },
+  ];
 
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-            className={styles.secondary}
-          >
-            Read our docs
-          </a>
+  const [allOptions, setAllOptions] = useState<Option[]>(initialOptions);
+  const [selectedItems, setSelectedItems] = useState<Option[]>([]);
+
+  const removeItem = useCallback((item: Option) => {
+    setSelectedItems((prev) => prev.filter((v) => v.title !== item.title));
+  }, []);
+
+  const handleNewItem = (newItem: Option) => {
+    setAllOptions((prev) => [...prev, newItem]);
+  };
+
+  return (
+    <div className={styles["page"]}>
+      <div className={styles["page__dropdown-container"]}>
+        <Dropdown
+          selectedItems={selectedItems}
+          options={allOptions}
+          onChange={setSelectedItems}
+          onNewItem={handleNewItem}
+          placeholder="Select an option..."
+        />
+
+        {/* Selected Items */}
+        <div className={styles["page__selected-items"]}>
+          {selectedItems.map((item) => (
+            <div key={item.title} className={styles["page__selected-item"]}>
+              <item.icon size={16} />
+              <span>{item.title}</span>
+              <XCircle
+                size={16}
+                onClick={() => removeItem(item)}
+                className={styles["page__remove-icon"]}
+              />
+            </div>
+          ))}
         </div>
-      </main>
-      <footer className={styles.footer}>
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      </div>
     </div>
   );
 }
