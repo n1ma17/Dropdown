@@ -76,6 +76,7 @@ const DropDown: React.FC<Props> = ({
     setInputValue("");
   };
 
+
   return (
     <div
       className={clsx(styles["drop-down"], {
@@ -91,7 +92,10 @@ const DropDown: React.FC<Props> = ({
           onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={(e) => e.key === "Enter" && handleAddNewItem()}
           placeholder={placeholder}
-          onFocus={() => setIsFocused(true)}
+          onFocus={() => {
+            setIsFocused(true);
+            setIsDropdownOpen(true);
+          }}
           onBlur={() => setIsFocused(false)}
           onClick={(e) => e.stopPropagation()}
         />
